@@ -8,7 +8,7 @@ if( env === 'development' || env === 'test') {
         process.env[key] = envConfig[key];  //will set PORT or MongoDB
     });//takes an Object keys and turns them into array
 }
-
+//checking
 console.log("env********", env);
 
 // if ( env === 'development') {
