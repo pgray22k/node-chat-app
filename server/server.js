@@ -26,13 +26,38 @@ var io = socketIO(server);
 /*
     when you call this method it register for  event listener on th server
     connection - listens when there is a new connection
+    usually we will not attach any other information to the io only within the
+    connection we will create custom events
  */
 io.on('connection', (socket)=> {
     console.log( 'New User connected');
 
-    socket.on('disconnect', ()=> {
-       console.log('Client is disconnected');
+    //create an event
+    //when creating an event it has to match the caller you want to emit too
+    // socket.emit('newEmail', {
+    //     from: 'and@example.com',
+    //     text: 'Hey. What is going on',
+    //     createdAt: 123
+    // });
+    //
+    // socket.on('createEmail', (newEmail)=>{
+    //     console.log('createEmail', newEmail);
+    // });
+
+    socket.emit('newMessage', {
+        from: "Phil",
+        text: "Hey I am in the chat room",
+        createdAt: new Date().toString()
     });
+
+    socket.on('createMessage', (newMessage) => {
+        console.log('createMessage', newMessage);
+    });
+
+    socket.on('disconnect', ()=> {
+       console.log('User was disconnected');
+    });
+
 });
 /*
 create middleware using express - middleware gives us the ability to point to other locations to handle html, js, etc.
