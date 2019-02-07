@@ -44,14 +44,22 @@ io.on('connection', (socket)=> {
     //     console.log('createEmail', newEmail);
     // });
 
-    socket.emit('newMessage', {
-        from: "Phil",
-        text: "Hey I am in the chat room",
-        createdAt: new Date().toString()
-    });
+    //socket.emit - sends and emit / broadcast to a single user
+    // socket.emit('newMessage', {
+    //     from: "Phil",
+    //     text: "Hey I am in the chat room",
+    //     createdAt: new Date().toString()
+    // });
 
     socket.on('createMessage', (newMessage) => {
         console.log('createMessage', newMessage);
+
+        //io.emmit sends an emit/broadcast to every user, browser
+        io.emit('newMessage', {
+            from: newMessage.from,
+            text: newMessage.text,
+            createdAt: new Date().toString()
+        })
     });
 
     socket.on('disconnect', ()=> {
