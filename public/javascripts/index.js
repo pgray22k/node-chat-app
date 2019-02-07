@@ -26,3 +26,12 @@ socket.on('disconnect', ()=> {
 socket.on('newMessage', (message) => {
    console.log('newMessage', message) ;
 });
+
+
+// socket.on('joinChat', (welcomeMsg) => {
+//     console.log('newMessage', welcomeMsg) ;
+// });
+
+// socket.on('newUserJoin', (newUserMsg) => {
+//     console.log('newMessage', newUserMsg) ;
+// });

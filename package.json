@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "test": "export NODE_ENV=test || set \"NODE_ENV=test\" && mocha \"./{,!(node_modules)/**}/*.test.js\" --timeout 10000",
+    "test-watch": "nodemon --exec \"npm test\" "
   },
   "engines": {
     "node": "11.7.0"
@@ -16,5 +18,9 @@
     "morgan": "~1.9.0",
     "pug": "2.0.0-beta11",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "expect": "^24.1.0",
+    "mocha": "^5.2.0"
   }
 }

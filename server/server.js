@@ -7,6 +7,7 @@ const express = require( 'express');
 const socketIO = require('socket.io');
 //const bodyParser = require('body-parser');
 
+const {generateMessage} = require('./utils/message');
 const publicPath = path.join(__dirname, '../public');
 //__dirname is the current directory
 //console.log(__dirname+'/../public'); //.. goes up a directory to get to public folder
@@ -28,6 +29,8 @@ var io = socketIO(server);
     connection - listens when there is a new connection
     usually we will not attach any other information to the io only within the
     connection we will create custom events
+
+    broadcasting - when you emmit events to everyone but the specific calling user
  */
 io.on('connection', (socket)=> {
     console.log( 'New User connected');
@@ -51,15 +54,42 @@ io.on('connection', (socket)=> {
     //     createdAt: new Date().toString()
     // });
 
-    socket.on('createMessage', (newMessage) => {
-        console.log('createMessage', newMessage);
+    //server is sending out utils to everyone connected to the app
+    // socket.emit('newMessage', {
+    //     from: 'Admin',
+    //     text: 'Welcome to the chat app',
+    //     createdAt: new Date().toString()
+    // } );
+
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+
+    // socket.broadcast.emit('newMessage', {
+    //     from: 'Admin',
+    //     text: "New User Joined",
+    //     createdAt: new Date().toString()
+    // });
+
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
+
+
+    socket.on('createMessage', (message) => {
+        console.log('createMessage', message);
 
         //io.emmit sends an emit/broadcast to every user, browser
-        io.emit('newMessage', {
-            from: newMessage.from,
-            text: newMessage.text,
-            createdAt: new Date().toString()
-        })
+        // io.emit('newMessage', {
+        //     from: newMessage.from,
+        //     text: newMessage.text,
+        //     createdAt: new Date().toString()
+        // })
+
+        io.emmit('newMessasge', generateMessage( message.from, message.text ));
+
+        //broadcast to everyone but the caller
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdAt: new Date().toString()
+        // })
     });
 
     socket.on('disconnect', ()=> {
