@@ -93,9 +93,11 @@ io.on('connection', (socket)=> {
 
         //calling the call back function will send the information back to the frontend notifying
         //the client we got the information back
-        callback({
-            text: 'This is from the server'
-        });
+        callback(
+            //{
+         //   text: 'This is from the server'
+        //}
+        );
     });
 
     socket.on('createLocationMessage', (coords)=> {
