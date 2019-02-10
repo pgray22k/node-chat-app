@@ -72,7 +72,7 @@ io.on('connection', (socket)=> {
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
 
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log('createMessage', message);
 
         //io.emmit sends an emit/broadcast to every user, browser
@@ -82,7 +82,7 @@ io.on('connection', (socket)=> {
         //     createdAt: new Date().toString()
         // })
 
-        io.emmit('newMessasge', generateMessage( message.from, message.text ));
+        io.emit('newMessage', generateMessage( message.from, message.text ));
 
         //broadcast to everyone but the caller
         // socket.broadcast.emit('newMessage', {
@@ -90,6 +90,12 @@ io.on('connection', (socket)=> {
         //     text: message.text,
         //     createdAt: new Date().toString()
         // })
+
+        //calling the call back function will send the information back to the frontend notifying
+        //the client we got the information back
+        callback({
+            text: 'This is from the server'
+        });
     });
 
     socket.on('disconnect', ()=> {

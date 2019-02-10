@@ -1,4 +1,7 @@
+//client application calls
+
 var socket = io(); //initiating a request for the server to open a websocket
+
 
 socket.on('connect', () => {
     console.log('Connected to Server');
@@ -25,7 +28,24 @@ socket.on('disconnect', ()=> {
 
 socket.on('newMessage', (message) => {
    console.log('newMessage', message) ;
+   //using jQuery to modify the message
+    var li = jQuery('<li></li>');
+    li.text(`${message.from}: ${message.text}`)
+
+    jQuery('#messages').append(li);
 });
+
+//send a message to the server and have the server respond with an acknowledgement
+//
+// socket.emit('createMessage', {
+//     from: "And",
+//     text: "Hey. This is And"
+// }, (message)=>{
+//     //server acknowledge the we got the data
+//     console.log('Got it!');
+//     //server can send the message for any format we like, obj, string, etc.
+//     console.log( JSON.stringify( message ) );
+// });
 
 
 // socket.on('joinChat', (welcomeMsg) => {
@@ -35,3 +55,14 @@ socket.on('newMessage', (message) => {
 // socket.on('newUserJoin', (newUserMsg) => {
 //     console.log('newMessage', newUserMsg) ;
 // });
+
+jQuery('#message-form').on('submit', function (e) {
+    e.preventDefault();
+
+    socket.emit('createMessage', {
+        from: 'User',
+        text: jQuery('[name=message]').val()
+    }, function (message) {
+        console.log('Got it!', JSON.stringify(message));
+    });
+});
