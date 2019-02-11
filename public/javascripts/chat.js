@@ -31,10 +31,34 @@ socket.on('connect', () => {
     //     to: "And",
     //     text: "Hey. This is And"
     // })
+
+    var params = jQuery.deparam( window.location.search );
+    socket.emit('join', params, function (err) {
+        if ( err ) {
+            alert(err);
+            window.location.href = '/';
+        } else {
+            console.log('There is no error');
+        }
+    });
 });
 
 socket.on('disconnect', ()=> {
     console.log('Disconnected to Server');
+});
+
+//updates new created users
+socket.on('updateUserList', (users)=>{
+    console.log('Users list', users);
+
+    var ol = jQuery('<ol></ol>')
+
+    users.forEach( function (user) {
+        ol.append(jQuery('<li></li>').text(user));
+    });
+
+    //wipe the list and update it with the new version
+    jQuery('#users').html(ol);
 });
 
 //custom event
